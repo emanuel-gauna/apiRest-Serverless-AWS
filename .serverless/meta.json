@@ -1,0 +1,72 @@
+{
+  "C:\\Users\\54116\\AWS\\task-management\\serverless.yml": {
+    "versionFramework": "4.9.1",
+    "servicePath": "C:\\Users\\54116\\AWS\\task-management\\serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "task-management",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "region": "us-east-1",
+        "environment": {
+          "AWS_REGION": "us-east-1",
+          "DB_HOST": "${env.DB_HOST}",
+          "PORT": "${env.PORT}",
+          "DB_USER": "${env.DB_USER}",
+          "DB_PASSWORD": "<REDACTED>",
+          "DB_NAME": "${env.DB_NAME}"
+        }
+      },
+      "functions": {
+        "app": {
+          "handler": "handler.main",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/tasks",
+                "method": "GET"
+              }
+            },
+            {
+              "httpApi": {
+                "path": "/tasks",
+                "method": "POST"
+              }
+            }
+          ]
+        }
+      },
+      "plugins": [
+        "serverless-offline"
+      ]
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs20.x",
+      "region": "us-east-1",
+      "environment": {
+        "AWS_REGION": "us-east-1",
+        "DB_HOST": "${env.DB_HOST}",
+        "PORT": "${env.PORT}",
+        "DB_USER": "${env.DB_USER}",
+        "DB_PASSWORD": "<REDACTED>",
+        "DB_NAME": "${env.DB_NAME}"
+      }
+    },
+    "error": {
+      "message": "request to https://core.serverless.com/api/bff/ failed, reason: getaddrinfo ENOTFOUND core.serverless.com",
+      "stack": "Error: request to https://core.serverless.com/api/bff/ failed, reason: getaddrinfo ENOTFOUND core.serverless.com\n    at Authentication.getClientDataFromAccessKey (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:549:18320)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Authentication.getAuthenticatedData (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:549:3689)\n    at async Authentication.authenticate (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:549:21806)\n    at async TraditionalRunner.resolveVariablesAndAuthenticate (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:553:2377)\n    at async TraditionalRunner.run (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:839:27893)\n    at async route (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:877:2779)\n    at async Object.run (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:878:3661)\n    at async run2 (file:///C:/Users/54116/.serverless/releases/4.9.1/package/dist/sf-core.js:878:4814)"
+    },
+    "serviceRawFile": "service: task-management\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs20.x\r\n  region: us-east-1\r\n  environment:\r\n    AWS_REGION: us-east-1\r\n    DB_HOST: ${env.DB_HOST}\r\n    PORT: ${env.PORT}\r\n    DB_USER: ${env.DB_USER}\r\n    DB_PASSWORD: ${env.DB_PASSWORD}\r\n    DB_NAME: ${env.DB_NAME}\r\n\r\nfunctions:\r\n  app:\r\n    handler: handler.main  # Debe coincidir con la exportación en handler.js\r\n    events:\r\n      - httpApi:\r\n          path: /tasks\r\n          method: GET\r\n      - httpApi:\r\n          path: /tasks\r\n          method: POST\r\n\r\nplugins:\r\n  - serverless-offline\r\n",
+    "command": [
+      "offline"
+    ],
+    "options": {},
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

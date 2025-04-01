@@ -1,0 +1,37 @@
+service: task-management
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    AWS_REGION: us-east-1
+    DB_HOST: ${env.DB_HOST}
+    PORT: ${env.PORT}
+    DB_USER: ${env.DB_USER}
+    DB_PASSWORD: ${env.DB_PASSWORD}
+    DB_NAME: ${env.DB_NAME}
+
+functions:
+  app:
+    handler: handler.main  # Debe coincidir con la exportación en handler.js
+    events:
+      - httpApi:
+          path: /tasks
+          method: GET
+      - httpApi:
+          path: /tasks
+          method: POST
+      - httpApi:
+          path: /tasks/{id}
+          method: GET
+      - httpApi:
+          path: /tasks/{id}
+          method: DELETE
+      - httpApi:
+          path: /tasks/{id}
+          method: PUT
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
