@@ -31,6 +31,12 @@ functions:
       - httpApi:
           path: /tasks/{id}
           method: PUT
+      - httpApi:
+          path: /user/register
+          method: POST
+      - httpApi:
+          path: /user/login
+          method: POST
 plugins:
   - serverless-dotenv-plugin
   - serverless-offline
