@@ -1,13 +1,16 @@
 import jwt from "jsonwebtoken";
-const secretKey = process.env.SECRET_KEY; // ⚠️ Mejor usar variable de entorno
+const secretKey = process.env.JWT_SECRET; // ⚠️ Mejor usar variable de entorno
 
 export const authMiddleware = (req, res, next) => {
     // 1️⃣ Leer el token del header "Authorization"
-    const token = req.header("Authorization");
+    let token = req.header("Authorization");
 // 2️⃣ Si no hay token, devolver un error 401 (No autorizado)
     if (!token) {
-        // 3️⃣ Verificar si el token es válido
+        // 3️⃣ Verificar si existe el token 
         return res.status(401).json({ message: "Acceso denegado. No hay token." });
+    }
+    if(token.startsWith("Bearer ")){
+        token = token.slice(7);// Remueve "Bearer " y deja solo el token
     }
 
     try {
