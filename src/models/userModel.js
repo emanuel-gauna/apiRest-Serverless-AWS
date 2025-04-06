@@ -1,13 +1,15 @@
 import db from "../db/rds.js";
 import bcrypt, { genSalt } from "bcryptjs";
 
-export const createUser = async(user) =>{
-    const {username, email, password} = user;
+export const createUser = async(userData) =>{
+    const {username, email, password, role="user"} = userData;
+     //rol por defecto
+
     const[result] = await db.query(
-        `INSERT INTO users (username, email, password) VALUES (?,?,?)`,
-        [username, email, password]
+        `INSERT INTO users (username, email, password, role) VALUES (?,?,?,?)`,
+        [username, email, password, role]
     );
-    return { id:result.insertId, username, email}; // Devuelve el nuevo usuario
+    return { id:result.insertId, username, email, role}; // Devuelve el nuevo usuario
 };
 
 export const getUserByEmail = async (email) =>{
@@ -16,4 +18,18 @@ export const getUserByEmail = async (email) =>{
         [email]
     )
     return rows[0]; // Retorna el usuario encontrado o `undefined`
+}
+export const getUserById = async(id)=>{
+    const [rows] = await db.query(
+        `SELECT * FROM users WHERE id = ?`,
+        [id]
+    )
+    return rows[0];
+}
+export const destroyUser = async(id) =>{
+    const [result] = await db.query(
+        `DELETE FROM users WHERE id = ?`,
+        [id]
+        );
+        return result.affectedRows > 0;
 }
