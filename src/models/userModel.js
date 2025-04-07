@@ -24,12 +24,20 @@ export const getUserById = async(id)=>{
         `SELECT * FROM users WHERE id = ?`,
         [id]
     )
-    return rows[0];
+    return rows[0];//retorna el 1er resultado ya que el id es unico
 }
+export const  editUserById = async(id, userData)=>{
+    const [result] = await db.query(
+        `UPDATE users SET  ? WHERE id = ?`,
+        [userData, id]
+    )
+    return result.affectedRows > 0 ;
+}
+
 export const destroyUser = async(id) =>{
     const [result] = await db.query(
         `DELETE FROM users WHERE id = ?`,
         [id]
         );
-        return result.affectedRows > 0;
+        return result.affectedRows > 0; //true si se modifico algo y false si no se modifico nada en las filas(rows)
 }

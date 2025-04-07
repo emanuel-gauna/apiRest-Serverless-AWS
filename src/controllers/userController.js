@@ -1,18 +1,13 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { validationResult } from "express-validator";
-import { createUser, getUserByEmail, destroyUser, getUserById } from "../models/userModel.js";
+import { createUser, getUserByEmail, destroyUser, getUserById, editUserById } from "../models/userModel.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 const secretKey = process.env.JWT_SECRET;
 
 export const registerUser = async (req ,res) =>{
-    const errors = validationResult(req);//validaciones de errores
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
         const { username, email, password, role} = req.body;
-    
     try {
         const existingUser = await getUserByEmail(email);//usuario existente
         if (existingUser) return res.status(400).json({message: "El mail ya esta registrado"});
@@ -31,11 +26,7 @@ export const registerUser = async (req ,res) =>{
 }
 
 export const loginUser = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
     const {email, password} = req.body;
-
     try {
         const user = await getUserByEmail(email);
         if (!user) return res.status(404).json({message: "El mail no inexistente, Cree un registro de usuario"});
@@ -60,9 +51,28 @@ export const loginUser = async (req, res) => {
         return res.status(500).json({message: "Error al iniciar sesion", error})
     }
 };
+//editar usuario
+export const editUser = async (req, res) => {
+    const { id } = req.params;
+    
+    try {
+        const newEditUser = await editUserById(id, req.body);
+        if(!newEditUser) return res.status(404).json({message:"usuario inexistente"});
+
+        const updatedUser = await getUserById(id);
+        return res.status(200).json({
+            message: "Usuario editado correctamente",
+            user: updatedUser
+            }); 
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error al editar el usuario",
+            error: error.message || error
+        })
+    }
+}
+//eliminar usuario(solo por admin)
 export const deleteUserById = async(req, res)=>{
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const {id} = req.params;
     try {
         const user = await getUserById(id);

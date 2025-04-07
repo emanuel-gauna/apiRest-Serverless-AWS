@@ -40,6 +40,9 @@ functions:
           method: POST
       - httpApi:
           path: /users/{id}
+          method: PUT
+      - httpApi:
+          path: /users/{id}
           method: DELETE
 plugins:
   - serverless-dotenv-plugin
