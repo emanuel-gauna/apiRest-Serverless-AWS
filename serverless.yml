@@ -42,6 +42,9 @@ functions:
           path: /users/{id}
           method: PUT
       - httpApi:
+          path: /users/admin/{id}
+          method: PUT
+      - httpApi:
           path: /users/{id}
           method: DELETE
 plugins:

@@ -52,25 +52,59 @@ export const loginUser = async (req, res) => {
     }
 };
 //editar usuario
-export const editUser = async (req, res) => {
+export const adminEditUser = async (req, res) => {
     const { id } = req.params;
-    
-    try {
-        const newEditUser = await editUserById(id, req.body);
-        if(!newEditUser) return res.status(404).json({message:"usuario inexistente"});
+    const { username, email, role } = req.body;
 
-        const updatedUser = await getUserById(id);
-        return res.status(200).json({
-            message: "Usuario editado correctamente",
-            user: updatedUser
-            }); 
-    } catch (error) {
-        return res.status(500).json({
-            message: "Error al editar el usuario",
-            error: error.message || error
-        })
+    try {
+        const userData = { username, email, role}; // Ignorar cualquier otro campo como 'role'
+
+        const updated = await editUserById(id, userData);
+        if (!updated) {
+            return res.status(404).json({ message: "Usuario inexistente" });
     }
-}
+
+    const updatedUser = await getUserById(id);
+    return res.status(200).json({
+      message: "Usuario editado por admin",
+      user: updatedUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al editar el usuario",
+      error: error.message || error,
+    });
+  }
+};
+//edit de usuario por el mismo
+// controllers/userController.js
+export const editOwnUser = async (req, res) => {
+    const { id } = req.params;
+  
+    // Verificamos que el usuario que intenta editar es él mismo
+    if (parseInt(id) !== req.user.id) {
+      return res.status(403).json({ message: "No tenés permisos para editar otro usuario" });
+    }
+  
+    const { username, email } = req.body;
+  
+    try {
+      const updated = await editUserById(id, { username, email });
+      if (!updated) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+  
+      const updatedUser = await getUserById(id);
+      return res.status(200).json({
+        message: "Usuario actualizado",
+        user: updatedUser
+      });
+    } catch (error) {
+      return res.status(500).json({ message: "Error al editar usuario", error: error.message });
+    }
+  };
+  
+
 //eliminar usuario(solo por admin)
 export const deleteUserById = async(req, res)=>{
     const {id} = req.params;
