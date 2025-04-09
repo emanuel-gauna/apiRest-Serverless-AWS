@@ -1,10 +1,55 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { createUser, getUserByEmail, destroyUser, getUserById, editUserById } from "../models/userModel.js";
+import { createUser, getUserByEmail, destroyUser, getUserById, editUserById, getAllUsers, getUserByRole } from "../models/userModel.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const secretKey = process.env.JWT_SECRET;
+
+export const allUsers = async(req ,res) => {
+    try {
+        const users = await getAllUsers();
+        const userRemovedPass = users.map(user =>{
+            const { password, ...rest } = user;
+            return rest;
+        });
+
+        return res.status(200).json({
+            message: `todos los usuarios registrados`,
+            user: userRemovedPass
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error al buscar los usuarios",
+            error: error.message || error
+        });
+    }
+}
+export const getUsersRole = async (req,res) => {
+    const {role} = req.params;
+
+    const validRoles = ["user", "admin"];
+    if(!validRoles.includes(role)){
+        return res.status(400).json({
+            message: "El rol no es válido",
+            error: "El rol debe ser user o admin"
+            });
+    }
+    try {
+        const userWithRole = await getUserByRole(role);
+        const userRemovedPass = userWithRole.map(({password, ...rest}) =>rest);
+            return res.status(200).json({
+                message: `todos los usuarios con el rol: ${role}`,
+                user: userRemovedPass
+                })
+    } catch (error) {
+        return res.status(500).json({
+            message:  "Error al buscar los usuarios por rol",
+            error: error.message || error
+        })
+    }
+}
 
 export const registerUser = async (req ,res) =>{
         const { username, email, password, role} = req.body;

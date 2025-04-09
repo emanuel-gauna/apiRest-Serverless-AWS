@@ -39,6 +39,12 @@ functions:
           path: /users/login
           method: POST
       - httpApi:
+          path: /users
+          method: GET
+      - httpApi:
+          path: /users/role/{role}
+          method: GET
+      - httpApi:
           path: /users/{id}
           method: PUT
       - httpApi:

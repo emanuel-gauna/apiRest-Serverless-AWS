@@ -1,6 +1,17 @@
 import db from "../db/rds.js";
 import bcrypt, { genSalt } from "bcryptjs";
 
+export const getAllUsers = async()=>{
+    const [rows] = await db.query(`SELECT * FROM users`);
+    return rows;
+    
+}
+export const getUserByRole = async(role)=>{
+    const [rows] = await db.query(`SELECT * FROM users WHERE role = ?`,
+        [role]);
+        return rows;
+}
+
 export const createUser = async(userData) =>{
     const {username, email, password, role="user"} = userData;
      //rol por defecto

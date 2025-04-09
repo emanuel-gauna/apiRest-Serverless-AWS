@@ -4,7 +4,9 @@ import {
   registerUser,
   deleteUserById,
   adminEditUser,
-  editOwnUser
+  editOwnUser,
+  allUsers,
+  getUsersRole
 } from "../controllers/userController.js";
 
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -18,6 +20,10 @@ import {
 } from "../validators/userValidators.js";
 
 const router = express.Router();
+
+//buscar un todos los usuarios,y por rol(solo admin) 
+router.get("/" , authMiddleware ,isAdmin,allUsers );
+router.get("/role/:role", authMiddleware, isAdmin, getUsersRole);
 
 // Registro y login
 router.post("/register", validateRegister, validateFields, registerUser);
