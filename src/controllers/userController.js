@@ -59,7 +59,12 @@ export const registerUser = async (req ,res) =>{
 
         const hashedPassword = bcrypt.hashSync(password,10);//hashear contraseña
         const user = await createUser({ username, email, password: hashedPassword, role});//crear nuevo usuario
-        const token = jwt.sign({id:user.id, role:user.role},  secretKey, { expiresIn: '1h'}); //generar token
+        const token = jwt.sign({
+            id:user.id,
+            username:user.username,
+            email:user.email,
+            role:user.role
+        },  secretKey, { expiresIn: '1h'}); //generar token
         return res.status(201).json({
             message: "Usuario creado correctamente",
             user,
@@ -81,7 +86,7 @@ export const loginUser = async (req, res) => {
         if (!isMatch) return res.status(401).json({message: "La contraseña no coinciden"});
 
         // Generar JWT
-        const token = jwt.sign({id: user.id, email: user.email, role: user.role}, secretKey, {expiresIn: "1h"});
+        const token = jwt.sign({id: user.id, username: user.username , email: user.email, role: user.role}, secretKey, {expiresIn: "1h"});
         return res.status(200).json({
             message: "Inicio de sesion exitoso",
             token,
@@ -121,6 +126,8 @@ export const adminEditUser = async (req, res) => {
     });
   }
 };
+
+
 //edit de usuario por el mismo
 // controllers/userController.js
 export const editOwnUser = async (req, res) => {

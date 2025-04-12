@@ -1,3 +1,4 @@
+//esta middleware solo se aplica en peticiones que se envian en el body 
 import { validationResult } from "express-validator";
 
 export const validateFields = (req, res, next) => {

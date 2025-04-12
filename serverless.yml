@@ -18,20 +18,29 @@ functions:
     handler: handler.main  # Debe coincidir con la exportación en handler.js
     events:
       - httpApi:
+          path: /tasks/admin
+          method: GET
+      - httpApi:
+          path: /tasks/admin
+          method: POST
+      - httpApi:
+          path: /tasks/admin/{id}
+          method: GET
+      - httpApi:
+          path: /tasks/admin/{id}
+          method: DELETE
+      - httpApi:
+          path: /tasks/admin/{id}
+          method: PUT
+      - httpApi:
           path: /tasks
+          method: GET
+      - httpApi:
+          path: /tasks/{id}
           method: GET
       - httpApi:
           path: /tasks
           method: POST
-      - httpApi:
-          path: /tasks/{id}
-          method: GET
-      - httpApi:
-          path: /tasks/{id}
-          method: DELETE
-      - httpApi:
-          path: /tasks/{id}
-          method: PUT
       - httpApi:
           path: /users/register
           method: POST
